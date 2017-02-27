@@ -96,56 +96,57 @@ export class ToasterContainerComponent {
     }
 
     private addToast(toast: Toast) {
-        toast.toasterConfig = this.toasterconfig;
+        this.ngZone.run(() => {
+            toast.toasterConfig = this.toasterconfig;
 
-        if (toast.toastContainerId && this.toasterconfig.toastContainerId
-            && toast.toastContainerId !== this.toasterconfig.toastContainerId) return;
+            if (toast.toastContainerId && this.toasterconfig.toastContainerId
+                && toast.toastContainerId !== this.toasterconfig.toastContainerId) return;
 
-        if (!toast.type) {
-            toast.type = this.toasterconfig.defaultTypeClass;
-        }
-
-        if (this.toasterconfig.preventDuplicates && this.toasts.length > 0) {
-            if (toast.toastId && this.toasts.some(t => t.toastId === toast.toastId)) {
-                return;
-            } else if (this.toasts.some(t => t.body === toast.body)) {
-                return;
+            if (!toast.type) {
+                toast.type = this.toasterconfig.defaultTypeClass;
             }
-        }
 
-        if (toast.showCloseButton === null || typeof toast.showCloseButton === "undefined") {
-            if (typeof this.toasterconfig.showCloseButton === "object") {
-                toast.showCloseButton = this.toasterconfig.showCloseButton[toast.type];
-            } else if (typeof this.toasterconfig.showCloseButton === "boolean") {
-                toast.showCloseButton = <boolean>this.toasterconfig.showCloseButton;
+            if (this.toasterconfig.preventDuplicates && this.toasts.length > 0) {
+                if (toast.toastId && this.toasts.some(t => t.toastId === toast.toastId)) {
+                    return;
+                } else if (this.toasts.some(t => t.body === toast.body)) {
+                    return;
+                }
             }
-        }
 
-        if (toast.showCloseButton) {
-            toast.closeHtml = toast.closeHtml || this.toasterconfig.closeHtml;
-        }
+            if (toast.showCloseButton === null || typeof toast.showCloseButton === "undefined") {
+                if (typeof this.toasterconfig.showCloseButton === "object") {
+                    toast.showCloseButton = this.toasterconfig.showCloseButton[toast.type];
+                } else if (typeof this.toasterconfig.showCloseButton === "boolean") {
+                    toast.showCloseButton = <boolean>this.toasterconfig.showCloseButton;
+                }
+            }
 
-        toast.bodyOutputType = toast.bodyOutputType || this.toasterconfig.bodyOutputType;
+            if (toast.showCloseButton) {
+                toast.closeHtml = toast.closeHtml || this.toasterconfig.closeHtml;
+            }
 
-        this.configureTimer(toast);
+            toast.bodyOutputType = toast.bodyOutputType || this.toasterconfig.bodyOutputType;
 
-        if (this.toasterconfig.newestOnTop) {
-            this.ngZone.run(() => {
+            this.configureTimer(toast);
+
+            if (this.toasterconfig.newestOnTop) {
                 this.toasts.unshift(toast);
-            });
-            if (this.isLimitExceeded()) {
-                this.toasts.pop();
+                
+                if (this.isLimitExceeded()) {
+                    this.toasts.pop();
+                }
+            } else {
+                this.toasts.push(toast);
+                if (this.isLimitExceeded()) {
+                    this.toasts.shift();
+                }
             }
-        } else {
-            this.toasts.push(toast);
-            if (this.isLimitExceeded()) {
-                this.toasts.shift();
-            }
-        }
 
-        if (toast.onShowCallback) {
-            toast.onShowCallback(toast);
-        }
+            if (toast.onShowCallback) {
+                toast.onShowCallback(toast);
+            }
+        });
     }
 
     private configureTimer(toast: Toast) {

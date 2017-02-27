@@ -1,5 +1,5 @@
 {
-  "name": "angular2-toaster",
+  "name": "angular2-toaster-mod",
   "version": "2.0.0",
   "description": "An Angular 2 Toaster Notification library based on AngularJS-Toaster",
   "main": "bundles/angular2-toaster.umd.js",
@@ -28,10 +28,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stabzs/Angular2-Toaster.git"
+    "url": "https://github.com/casahuga/Angular2-Toaster.git"
   },
   "bugs": {
-    "url": "https://github.com/stabzs/Angular2-Toaster/issues"
+    "url": "https://github.com/casahuga/Angular2-Toaster/issues"
   },
   "peerDependencies": {
     "@angular/common": "^2.0.0",

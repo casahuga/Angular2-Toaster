@@ -19,7 +19,7 @@ A dynamic Angular2 and Typescript demo can be found at
 ## Installation:
 
 ```bash
-npm install angular2-toaster
+npm install angular2-toaster-mod
 ```
 
 ## Import CSS
@@ -31,7 +31,7 @@ npm install angular2-toaster
 
 ### Import CSS with Sass or Less
 ```scss
-@import 'node_modules/angular2-toaster/toaster';
+@import 'node_modules/angular2-toaster-mod/toaster';
 ```
 
 

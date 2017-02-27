@@ -1,4 +1,4 @@
-import {Component, Input, ChangeDetectorRef} from '@angular/core';
+import {Component, Input, ChangeDetectorRef, NgZone} from '@angular/core';
 import {ToasterConfig} from './toaster-config';
 import {ToasterService, IClearWrapper} from './toaster.service';
 import {Toast} from './toast';
@@ -30,7 +30,7 @@ export class ToasterContainerComponent {
     public toasts: Toast[] = [];
 
 
-    constructor(toasterService: ToasterService, private ref : ChangeDetectorRef) {
+    constructor(toasterService: ToasterService, private ref : ChangeDetectorRef, private ngZone: NgZone) {
         this.toasterService = toasterService;
     }
 
@@ -130,7 +130,9 @@ export class ToasterContainerComponent {
         this.configureTimer(toast);
 
         if (this.toasterconfig.newestOnTop) {
-            this.toasts.unshift(toast);
+            this.ngZone.run(() => {
+                this.toasts.unshift(toast);
+            });
             if (this.isLimitExceeded()) {
                 this.toasts.pop();
             }
